@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Totem de acesso – Portaria de pedestres</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;600;700&family=Barlow+Condensed:wght@600;700&display=swap">
+<style>
+:root{--bg:#F3F6FB;--card:#fff;--ink:#0A2150;--mut:#4A5C7D;--line:#CBD5E6;--acc:#0A3CA8;--accT:#fff;--grn:#00923F;--ok:#00803A;--err:#B3261E;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#061A45;--card:#0B2A6B;--ink:#EEF3FF;--mut:#A9BCE0;--line:#2A4A92;--acc:#3A78FF;--accT:#fff;--grn:#35D07F;--ok:#4BE08F;--err:#FF8A80}}
+:root[data-theme="dark"]{--bg:#061A45;--card:#0B2A6B;--ink:#EEF3FF;--mut:#A9BCE0;--line:#2A4A92;--acc:#3A78FF;--accT:#fff;--grn:#35D07F;--ok:#4BE08F;--err:#FF8A80}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 1rem/1.45 Barlow,system-ui,sans-serif;min-height:100vh;display:flex;flex-direction:column}
+header{display:flex;flex-wrap:wrap;gap:.75rem;align-items:center;justify-content:space-between;padding:.9rem 1.25rem;border-bottom:4px solid var(--grn);background:var(--card)}
+header b{font:700 1.4rem 'Barlow Condensed',Barlow,sans-serif;letter-spacing:.02em}header small{display:block;color:var(--mut)}
+.tools{display:flex;gap:.5rem;align-items:center}
+button{font:600 1.15rem Barlow,sans-serif;min-height:3.5rem;padding:0 1.25rem;border-radius:.6rem;border:2px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer}
+button:focus-visible{outline:4px solid var(--acc);outline-offset:2px}button:disabled{opacity:.5}
+.pri{background:var(--acc);border-color:var(--acc);color:var(--accT)}.sec{background:transparent}.wide{width:100%;margin-top:.75rem}
+#prog{list-style:none;display:flex;gap:.4rem;margin:0;padding:.75rem 1.25rem;overflow-x:auto}
+#prog li{flex:1;min-width:7rem;padding:.4rem .6rem;border-bottom:4px solid var(--line);color:var(--mut);font-weight:600}
+#prog li.on{border-color:var(--acc);color:var(--ink)}#prog li.dn{border-color:var(--ok);color:var(--ok)}
+main{flex:1;display:flex;justify-content:center;padding:1rem 1.25rem 2rem}
+#stage{width:100%;max-width:56rem}
+h1{font:700 clamp(2rem,5vw,3rem)/1.05 'Barlow Condensed',Barlow,sans-serif;margin:.5rem 0}
+p{color:var(--mut);max-width:60ch;font-size:1.15rem}
+.langs{display:grid;gap:1rem;margin-top:1.5rem}.langs button{min-height:5.5rem;font-size:1.8rem;text-align:left}
+.cpf{font:700 2.6rem 'Barlow Condensed',sans-serif;letter-spacing:.06em;background:var(--card);border:2px solid var(--line);border-radius:.6rem;padding:.6rem 1rem;min-height:4.5rem}
+.pad{display:grid;grid-template-columns:repeat(3,1fr);gap:.6rem;margin-top:.9rem;max-width:30rem}.pad button{min-height:4.5rem;font-size:1.7rem}
+.kb{display:grid;grid-template-columns:repeat(10,1fr);gap:.4rem;margin-top:.9rem}.kb button{min-height:4rem;font-size:1.4rem;padding:0}.kb .pri,.kb .sec{grid-column:span 3}
+.cam{position:relative;max-width:28rem;margin:1rem auto;border-radius:.8rem;overflow:hidden;background:#000;aspect-ratio:4/3}.cam video,.cam img{width:100%;height:100%;object-fit:cover}.cam video{transform:scaleX(-1)}#cnt{position:absolute;inset:0;display:grid;place-items:center;font:700 7rem 'Barlow Condensed',sans-serif;color:#fff;text-shadow:0 2px 12px #000}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(18rem,1fr));gap:1.25rem;margin-top:1rem}
+.card{background:var(--card);border:2px solid var(--line);border-radius:.8rem;padding:1.25rem}
+dl{margin:0}dt{color:var(--mut);font-size:.95rem;margin-top:.7rem}dd{margin:0;font-weight:600;font-size:1.25rem}
+.bio{text-align:center}.fp{width:9rem;height:9rem;margin:.5rem auto;color:var(--mut);position:relative;overflow:hidden}
+.fp.scanning{color:var(--acc)}.fp.scanning:after{content:"";position:absolute;left:0;right:0;height:4px;background:var(--acc);animation:sc 1s ease-in-out infinite alternate}
+.fp.good{color:var(--ok)}@keyframes sc{from{top:0}to{top:100%}}
+.msg{font-weight:700;font-size:1.3rem;min-height:2rem}.good{color:var(--ok)}.bad{color:var(--err)}
+.chips{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.4rem}.chip{padding:.35rem .8rem;border-radius:2rem;border:2px solid var(--line);font-weight:600}.chip.ok:before{content:"✓ ";color:var(--ok)}
+.agree{display:flex;gap:1rem;align-items:flex-start;margin:1.25rem 0;font-size:1.15rem;cursor:pointer}.agree input{width:2.2rem;height:2.2rem;accent-color:var(--acc);flex:none}
+.slot{height:1rem;background:var(--ink);border-radius:1rem;max-width:22rem;margin:1rem auto 0}
+.bw{overflow:hidden;max-width:20rem;margin:0 auto}
+.badge{background:#fff;color:#0B1F3A;border-radius:0 0 .8rem .8rem;border:2px solid #0B1F3A;border-top:0;animation:out 2.6s ease-out both;font-size:1rem}
+@keyframes out{from{transform:translateY(-100%)}to{transform:none}}
+.band{padding:.6rem 1rem;color:#fff;font:700 1.4rem 'Barlow Condensed',sans-serif}
+.bd{padding:1rem;display:grid;gap:.15rem}.bd b{font:700 1.7rem/1.1 'Barlow Condensed',sans-serif}.bd svg{width:7rem;height:7rem;margin-top:.5rem}
+.ph{width:4.5rem;height:4.5rem;border-radius:50%;background:#0B1F3A;color:#fff;display:grid;place-items:center;font:700 1.6rem Barlow;margin-bottom:.4rem}
+#toast,#idle{position:fixed;left:50%;transform:translateX(-50%);z-index:9}
+#toast{bottom:5rem;background:var(--ink);color:var(--bg);padding:.8rem 1.4rem;border-radius:.6rem;font-weight:600;display:none}
+#idle{inset:0;transform:none;background:rgba(7,20,42,.85);display:none;place-items:center;text-align:center;color:#fff}#idle h1{color:#fff}
+footer{padding:.75rem 1.25rem;color:var(--mut);font-size:.9rem;border-top:1px solid var(--line)}
+#bg{position:fixed;inset:0;z-index:0;pointer-events:none;background:linear-gradient(180deg,color-mix(in srgb,var(--acc) 18%,var(--bg)),var(--bg) 70%)}
+#bg svg{position:absolute;left:0;bottom:0;width:100%;height:62%;overflow:visible;opacity:.55}
+header,#prog,main,footer{position:relative;z-index:1}
+header{background:linear-gradient(100deg,#0A3CA8,#0A2150);color:#fff}header small{color:#BCD0F5}header .sec{color:#fff;border-color:#ffffff66}header .pri{background:var(--grn);border-color:var(--grn);color:#04210F}
+#clk{font:700 1.5rem 'Barlow Condensed',sans-serif;margin-right:.5rem}
+#prog li{border:0;border-radius:2rem;text-align:center;padding:.5rem 1rem;background:color-mix(in srgb,var(--card) 80%,transparent)}#prog li.on{background:var(--acc);color:var(--accT)}#prog li.dn{background:var(--grn);color:#04210F}
+.card{border-radius:1.2rem;box-shadow:0 10px 30px -12px rgba(10,33,80,.35);background:color-mix(in srgb,var(--card) 90%,transparent);backdrop-filter:blur(8px)}.cpf{background:color-mix(in srgb,var(--card) 90%,transparent)}button{border-radius:.9rem}
+#stage{animation:in .45s ease-out}@keyframes in{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+#bg .a{fill:var(--acc)}#bg .g{fill:var(--grn)}#bg .m{fill:var(--mut)}#bg .o{fill:#E7A33C}#bg .w{fill:#fff}#bg .ln{stroke:var(--mut);stroke-width:3;fill:none}
+.drift{animation:drift 30s ease-in-out infinite alternate}.bob{animation:bob 4s ease-in-out infinite}.trol{animation:trol 12s ease-in-out infinite alternate}.hoist{animation:hoist 6s ease-in-out infinite}.drv{animation:drv 16s linear infinite}.spin{animation:spin 1s linear infinite;transform-box:fill-box;transform-origin:center}.road{animation:dash 1s linear infinite}
+@keyframes drift{to{transform:translateX(120px)}}@keyframes bob{50%{transform:translateY(6px)}}@keyframes trol{to{transform:translateX(220px)}}@keyframes hoist{50%{transform:translateY(50px)}}@keyframes drv{from{transform:translateX(-460px)}to{transform:translateX(1260px)}}@keyframes spin{to{transform:rotate(360deg)}}@keyframes dash{to{stroke-dashoffset:70}}
+@media(prefers-reduced-motion:reduce){.badge,.fp.scanning:after,#bg *,#stage{animation:none!important}}
+</style>
+</head>
+<body>
+<div id="bg"></div>
+<header>
+  <div><b>Santos Brasil</b><small id="sub">Portaria de pedestres</small></div>
+  <div class="tools"><span id="clk"></span><button class="sec" id="vxb" onclick="vx()" aria-label="Voz" style="opacity:.6">🔊</button><button class="sec" onclick="fz()" aria-label="Aumentar letra">A+</button><button class="sec" onclick="th()" aria-label="Alto contraste">◐</button><button class="pri" id="callb" onclick="callA()">Chamar atendente</button></div>
+</header>
+<ol id="prog"></ol>
+<main><section id="stage" aria-live="polite"></section></main>
+<footer>Modo demonstração, dados simulados. CPF: 12345678909, 11144477735, 98765432100 (tripulante), 22233344405 (biometria não confere), 55566677788 (outro dia). Passaporte: XA123456. RNM: V123456A. Qualquer outro: sem pré-agendamento. A câmera pede permissão do navegador.</footer>
+<div id="toast" role="status"></div>
+<div id="idle"><div><h1 id="idt"></h1><h1 id="idn">10</h1><button class="pri" onclick="stay()" id="idb"></button></div></div>
+<script>
+const L={
+pt:{sub:'Portaria de pedestres',docT:'Qual documento você vai usar?',docS:'Escolha o documento que está no seu pré-agendamento.',idN:'Digite o número do documento',idS2:'Documento escolhido:',prev:'Voltar',phT:'Olhe para a câmera',phS:'Vamos registrar uma foto do seu rosto para a segurança do terminal.',phOk:'Foto registrada',noCam:'Câmera indisponível. Chame um atendente.',skip:'Continuar sem foto (teste)',welcome:'Bem-vindo ao terminal',welSub:'Acesso de pedestres somente com pré-agendamento. Escolha o idioma para começar.',idT:'Informe seu CPF',idS:'Use o CPF do seu pré-agendamento ou leia o QR Code que você recebeu.',qr:'Ler QR Code do agendamento',next:'Continuar',back:'Voltar ao início',del:'Apagar',nb:'Pré-agendamento não encontrado',nbT:'O acesso pelo totem exige agendamento feito antes pela empresa que vai receber você. Chame um atendente.',out:'Agendamento para outro dia',outT:'Seu pré-agendamento não vale para hoje. Fale com a empresa anfitriã ou chame um atendente.',hi:'Olá',grp:'Grupo de acesso',emp:'Empresa',dest:'Destino',win:'Janela de hoje',bioT:'Confirme sua biometria',bioS:'Apoie o dedo indicador no leitor e mantenha parado.',start:'Iniciar leitura',scan:'Lendo digital…',ok:'Biometria confirmada',fail:'Biometria não confere. Tentativa',blk:'Acesso bloqueado após 3 tentativas. Chame um atendente.',retry:'Tentar de novo',chk:'Antes de entrar',docs:'Documentos conferidos',epi:'EPIs obrigatórios neste destino',acc:'Li e aceito as regras de segurança do terminal (ISPS Code) e o uso dos meus dados (LGPD).',emit:'Emitir crachá',pr:'Imprimindo crachá…',badgeT:'Retire seu crachá',badgeS:'Use o crachá visível, na altura do peito, durante toda a permanência.',done:'Peguei meu crachá',finT:'Acesso liberado',finS:'Siga a sinalização até',finS2:'Seu anfitrião foi avisado. Devolva o crachá na saída.',again:'Novo atendimento',idle:'Você ainda está aí?',stay:'Continuar',call:'Chamar atendente',called:'Atendente chamado. Aguarde aqui.',valid:'Válido hoje até',steps:['Idioma','Documento','Número','Biometria','Orientações','Crachá']},
+en:{sub:'Pedestrian gate',docT:'Which document will you use?',docS:'Choose the document used in your pre-booking.',idN:'Enter the document number',idS2:'Selected document:',prev:'Back',phT:'Look at the camera',phS:'We will take a photo of your face for terminal security.',phOk:'Photo saved',noCam:'Camera unavailable. Please call an attendant.',skip:'Continue without photo (test)',welcome:'Welcome to the terminal',welSub:'Pedestrian access by pre-booking only. Choose a language to start.',idT:'Enter your CPF',idS:'Use the CPF from your pre-booking or scan the QR Code you received.',qr:'Scan booking QR Code',next:'Continue',back:'Back to start',del:'Delete',nb:'Pre-booking not found',nbT:'Kiosk access requires a booking made beforehand by the host company. Please call an attendant.',out:'Booking is for another day',outT:'Your pre-booking is not valid today. Contact the host company or call an attendant.',hi:'Hello',grp:'Access group',emp:'Company',dest:'Destination',win:"Today's window",bioT:'Confirm your biometrics',bioS:'Rest your index finger on the reader and hold still.',start:'Start scan',scan:'Reading fingerprint…',ok:'Biometrics confirmed',fail:'Biometrics do not match. Attempt',blk:'Access blocked after 3 attempts. Please call an attendant.',retry:'Try again',chk:'Before you enter',docs:'Documents verified',epi:'Required PPE for this destination',acc:'I have read and accept the terminal safety rules (ISPS Code) and the use of my data (LGPD).',emit:'Issue badge',pr:'Printing badge…',badgeT:'Take your badge',badgeS:'Wear it visibly at chest height during your whole stay.',done:'I have my badge',finT:'Access granted',finS:'Follow the signs to',finS2:'Your host was notified. Return the badge on exit.',again:'New session',idle:'Are you still there?',stay:'Continue',call:'Call attendant',called:'Attendant called. Please wait here.',valid:'Valid today until',steps:['Language','Document','Number','Biometrics','Briefing','Badge']},
+es:{sub:'Portería peatonal',docT:'¿Qué documento va a usar?',docS:'Elija el documento de su reserva previa.',idN:'Ingrese el número del documento',idS2:'Documento elegido:',prev:'Volver',phT:'Mire a la cámara',phS:'Vamos a tomar una foto de su rostro para la seguridad de la terminal.',phOk:'Foto registrada',noCam:'Cámara no disponible. Llame a un asistente.',skip:'Continuar sin foto (prueba)',welcome:'Bienvenido a la terminal',welSub:'Acceso peatonal solo con reserva previa. Elija el idioma para comenzar.',idT:'Ingrese su CPF',idS:'Use el CPF de su reserva o lea el código QR que recibió.',qr:'Leer QR de la reserva',next:'Continuar',back:'Volver al inicio',del:'Borrar',nb:'Reserva previa no encontrada',nbT:'El acceso por tótem exige una reserva hecha antes por la empresa anfitriona. Llame a un asistente.',out:'Reserva para otro día',outT:'Su reserva no es válida hoy. Hable con la empresa anfitriona o llame a un asistente.',hi:'Hola',grp:'Grupo de acceso',emp:'Empresa',dest:'Destino',win:'Horario de hoy',bioT:'Confirme su biometría',bioS:'Apoye el dedo índice en el lector y no lo mueva.',start:'Iniciar lectura',scan:'Leyendo huella…',ok:'Biometría confirmada',fail:'La biometría no coincide. Intento',blk:'Acceso bloqueado tras 3 intentos. Llame a un asistente.',retry:'Intentar de nuevo',chk:'Antes de entrar',docs:'Documentos verificados',epi:'EPP obligatorio en este destino',acc:'Leí y acepto las reglas de seguridad de la terminal (ISPS Code) y el uso de mis datos (LGPD).',emit:'Emitir credencial',pr:'Imprimiendo credencial…',badgeT:'Retire su credencial',badgeS:'Úsela visible, a la altura del pecho, durante toda su estadía.',done:'Retiré mi credencial',finT:'Acceso liberado',finS:'Siga la señalización hasta',finS2:'Su anfitrión fue avisado. Devuelva la credencial al salir.',again:'Nueva atención',idle:'¿Sigue ahí?',stay:'Continuar',call:'Llamar asistente',called:'Asistente llamado. Espere aquí.',valid:'Válido hoy hasta',steps:['Idioma','Documento','Número','Biometría','Orientaciones','Credencial']}};
+const P={
+'12345678909':{n:'Carlos Mendes',e:'TecnoPorto Manutenção',g:'Prestador de serviço',c:'#0A3CA8',d:'Armazém 3',w:[8,17],day:0,bio:1,epi:['Capacete','Colete','Botina','Óculos'],doc:['ASO','Integração de segurança','Seguro']},
+'11144477735':{n:'Ana Souza',e:'Souza Despachos',g:'Despachante',c:'#00803A',d:'Administração, prédio A',w:[8,18],day:0,bio:1,epi:['Colete'],doc:['Procuração','Documento com foto']},
+'98765432100':{n:'Marcos Lima',e:'MV Atlântico',g:'Tripulante',c:'#0A2150',d:'Berço 2 (com escolta)',w:[6,22],day:0,bio:1,epi:['Capacete','Colete','Botina'],doc:['Crew list','Passaporte']},
+'22233344405':{n:'Paulo Reis',e:'Reis Logística',g:'Prestador de serviço',c:'#0A3CA8',d:'Pátio 1',w:[8,17],day:0,bio:0,epi:['Capacete','Colete','Botina'],doc:['ASO','Integração de segurança']},
+'55566677788':{n:'Lúcia Prado',e:'Prado Serviços',g:'Prestador de serviço',c:'#0A3CA8',d:'Oficina',w:[8,17],day:1,bio:1,epi:['Capacete','Colete'],doc:['ASO']},
+'passaporte:XA123456':{n:'John Carter',e:'Marine Survey Ltd',g:'Inspetor naval',c:'#0A2150',d:'Berço 2',w:[8,18],day:0,bio:1,epi:['Capacete','Colete','Botina','Óculos'],doc:['Passaporte','Integração de segurança']},
+'rnm:V123456A':{n:'Elena Torres',e:'Torres Logística',g:'Prestador de serviço',c:'#0A3CA8',d:'Armazém 3',w:[8,17],day:0,bio:1,epi:['Capacete','Colete','Botina'],doc:['ASO','Integração de segurança']}};
+let lang='pt',step=0,S={},it,ic;
+const $=i=>document.getElementById(i),t=k=>L[lang][k]??L.pt[k],stage=h=>$('stage').innerHTML=h;
+const f=s=>s.replace(/(\d{3})(\d{0,3})(\d{0,3})(\d{0,2})/,(m,a,b,c,d)=>a+(b?'.'+b:'')+(c?'.'+c:'')+(d?'-'+d:''));
+const pad=n=>String(n).padStart(2,'0');
+function go(n){step=n;R()}
+function setL(l){lang=l;document.documentElement.lang=l;go(1)}
+const cn=(x,y,c)=>`<rect class="${c}" x="${x}" y="${y}" width="46" height="26" stroke="#fff" stroke-width="2"/>`;
+const stk=(x,y,n,r)=>{let o='';for(let i=0;i<n;i++)for(let j=0;j<r;j++)o+=cn(x+i*48,y-j*28,'agmo'[(i*3+j*5)%4]);return o};
+const cor=(x,y,h,n,s)=>Array.from({length:n},(_,i)=>`<path d="M${x+i*s} ${y}v${h}" stroke="#fff" stroke-opacity=".35" stroke-width="3"/>`).join('');
+const wh=x=>`<g class="spin"><circle class="m" cx="${x}" cy="354" r="18" stroke="#fff" stroke-width="3"/><path d="M${x-14} 354h28" stroke="#fff" stroke-width="3"/></g>`;
+const sea=`<g class="bob"><path class="a" opacity=".5" d="M-600 380q50-16 100 0${'t100 0'.repeat(23)}V430H-600z"/></g>`;
+const gnd=(x=-600)=>`<rect class="m" x="${x}" y="370" width="2400" height="60" opacity=".55"/>`;
+const s0=`<g class="drift"><path class="a" d="M110 332h790l-60 52H170z"/>${stk(160,306,13,3)}<rect class="m" x="810" y="250" width="70" height="82"/><rect class="w" x="818" y="262" width="54" height="10"/><rect class="g" x="830" y="224" width="22" height="26"/></g>${sea}`;
+const SC=[s0,
+`${gnd()}<g class="m"><rect x="360" y="120" width="16" height="250"/><rect x="764" y="120" width="16" height="250"/><rect x="352" y="346" width="32" height="24" rx="8"/><rect x="756" y="346" width="32" height="24" rx="8"/></g><rect class="a" x="340" y="104" width="460" height="22"/><rect class="g" x="344" y="126" width="38" height="30"/>${stk(410,344,6,3)}<g class="trol"><rect class="g" x="430" y="126" width="54" height="14"/><g class="hoist"><path class="ln" d="M440 140V190M474 140V190"/>${cn(434,190,'o')}</g></g>`,
+`${gnd()}${stk(40,344,6,4)}${stk(870,344,6,3)}<g class="bob"><path class="ln" d="M440 108V0M760 108V0"/><rect class="m" x="430" y="108" width="340" height="12"/><rect class="g" x="400" y="120" width="400" height="190" rx="4"/>${cor(414,128,174,19,20)}<rect x="768" y="120" width="32" height="190" fill="#fff" fill-opacity=".25"/><text x="418" y="162" fill="#fff" font-family="Barlow Condensed,sans-serif" font-size="30" font-weight="700">TOTM 123456 0</text></g>`,
+`${gnd()}<path class="road" d="M-600 396H1800" fill="none" stroke="#fff" stroke-width="4" stroke-dasharray="40 30"/><g class="drv"><rect class="m" x="0" y="338" width="320" height="12"/><rect class="a" x="4" y="248" width="312" height="90"/>${cor(22,254,78,14,21)}<path class="g" d="M328 350v-90h48l36 38v52z"/><path class="w" d="M352 270h18l24 28h-42z" opacity=".8"/>${wh(60)}${wh(104)}${wh(356)}${wh(400)}</g>`,
+`${sea}${gnd(560)}<path class="m" d="M60 334h470l-40 50H100z"/>${stk(90,308,9,2)}<g class="a"><rect x="540" y="140" width="20" height="230"/><rect x="690" y="140" width="20" height="230"/></g><rect class="a" x="520" y="112" width="210" height="28"/><path class="g" d="M40 114h520v12H40zM730 114h160v12H730z"/><g class="trol"><rect class="g" x="80" y="126" width="54" height="14"/><g class="hoist"><path class="ln" d="M90 140V170M124 140V170"/>${cn(88,170,'o')}</g></g>`,
+`<circle class="o" cx="960" cy="150" r="80" opacity=".6"/>${s0}`];
+function bgc(){$('bg').innerHTML=`<svg viewBox="0 0 1200 420" preserveAspectRatio="xMidYMax meet" aria-hidden="true">${SC[step]}</svg>`;const s=$('stage');s.style.animation='none';void s.offsetWidth;s.style.animation=''}
+let vox=false;
+function sp(){if(!vox||!window.speechSynthesis)return;speechSynthesis.cancel();const h=document.querySelector('#stage h1');if(h){const u=new SpeechSynthesisUtterance(h.textContent);u.lang={pt:'pt-BR',en:'en-US',es:'es-ES'}[lang];speechSynthesis.speak(u)}}
+function vx(){vox=!vox;$('vxb').style.opacity=vox?1:.6;sp()}
+setInterval(()=>{$('clk').textContent=new Date().toLocaleTimeString(lang=='pt'?'pt-BR':lang,{hour:'2-digit',minute:'2-digit'})},1000);
+function R(){
+  $('prog').innerHTML=t('steps').map((s,i)=>`<li class="${i==step?'on':i<step?'dn':''}">${i+1}. ${s}</li>`).join('');
+  $('sub').textContent=t('sub');$('callb').textContent=t('call');$('idb').textContent=t('stay');$('idt').textContent=t('idle');
+  [v0,vT,v1,v2,v3,v4][step]();rs();bgc();sp();
+}
+function reset(){clearInterval(ic);$('idle').style.display='none';S={};lang='pt';go(0)}
+function v0(){stage(`<h1>${t('welcome')}</h1><p>${t('welSub')}</p><div class="langs"><button onclick="setL('pt')">Português</button><button onclick="setL('en')">English</button><button onclick="setL('es')">Español</button></div>`)}
+const DT={cpf:['CPF','CPF','CPF'],passaporte:['Passaporte','Passport','Pasaporte'],rnm:['RNM (Registro Nacional Migratório)','RNM (Brazilian migration card)','RNM (carné migratorio brasileño)'],cir:['Documento de tripulante (CIR)','Seafarer ID (CIR)','Documento de tripulante (CIR)']};
+const dlab=x=>DT[x][['pt','en','es'].indexOf(lang)];
+function vT(){stage(`<h1>${t('docT')}</h1><p>${t('docS')}</p><div class="langs">${Object.keys(DT).map(x=>`<button onclick="S.tipo='${x}';go(2)">${dlab(x)}</button>`).join('')}</div>`)}
+function v1(){S.buf='';const num=S.tipo=='cpf',keys=num?'1234567890':'1234567890QWERTYUIOPASDFGHJKLZXCVBNM';stage(`<h1>${t('idN')}</h1><p>${t('idS2')} <b>${dlab(S.tipo)}</b></p><div id="cpf" class="cpf">&nbsp;</div><div class="${num?'pad':'kb'}">${[...keys].map(c=>`<button onclick="k('${c}')">${c}</button>`).join('')}<button class="sec" onclick="k('<')">${t('del')}</button><button class="pri" onclick="ident()">${t('next')}</button></div>${num?`<button class="sec wide" style="max-width:30rem" onclick="S.cpf='12345678909';lookup()">${t('qr')}</button>`:''}<button class="sec wide" style="max-width:30rem" onclick="go(1)">${t('prev')}</button>`)}
+function k(d){S.buf=d=='<'?S.buf.slice(0,-1):(S.buf+d).slice(0,S.tipo=='cpf'?11:15);$('cpf').innerHTML=(S.tipo=='cpf'?f(S.buf):S.buf)||'&nbsp;'}
+function ident(){S.cpf=S.tipo=='cpf'?S.buf:S.tipo+':'+S.buf;lookup()}
+const TR={'Capacete':['Hard hat','Casco'],'Colete':['Safety vest','Chaleco'],'Botina':['Safety boots','Botas de seguridad'],'Óculos':['Safety glasses','Gafas de seguridad'],'Prestador de serviço':['Service provider','Prestador de servicio'],'Despachante':['Customs broker','Despachante'],'Tripulante':['Crew member','Tripulante'],'Inspetor naval':['Marine surveyor','Inspector naval'],'Integração de segurança':['Safety induction','Inducción de seguridad'],'Seguro':['Insurance','Seguro'],'Procuração':['Power of attorney','Poder notarial'],'Documento com foto':['Photo ID','Documento con foto'],'Passaporte':['Passport','Pasaporte'],'ASO':['Health certificate (ASO)','Certificado de salud (ASO)']};
+const tr=x=>lang=='pt'?x:(TR[x]?.[lang=='en'?0:1]||x);
+let stream;
+async function photo(){
+  stage(`<h1>${t('phT')}</h1><p>${t('phS')}</p><div class="cam"><video id="vid" autoplay playsinline muted></video><div id="cnt"></div></div><div id="pm" class="msg"></div>`);
+  try{stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'user'}});$('vid').srcObject=stream;let n=3;$('cnt').textContent=n;
+    const iv=setInterval(()=>{n--;if(n>0){$('cnt').textContent=n;return}clearInterval(iv);shot()},1000)}
+  catch(e){const m=$('pm');m.className='msg bad';m.textContent=t('noCam');m.insertAdjacentHTML('afterend',`<button class="pri" onclick="callA()">${t('call')}</button>${API?'':` <button class="sec" onclick="fin()">${t('skip')}</button>`}`)}
+}
+function shot(){const v=$('vid'),c=document.createElement('canvas');c.width=v.videoWidth||640;c.height=v.videoHeight||480;c.getContext('2d').drawImage(v,0,0);const img=c.toDataURL('image/jpeg',.85);stream.getTracks().forEach(x=>x.stop());
+  document.querySelector('.cam').innerHTML=`<img src="${img}" alt="">`;const m=$('pm');m.className='msg good';m.textContent=t('phOk');
+  if(API)api('/foto',{cpf:S.cpf,numero:S.no,foto:img}).catch(()=>{});setTimeout(fin,1800)}
+function err(x){stage(`<h1>${t(x)}</h1><p>${t(x+'T')}</p><button class="pri" onclick="callA()">${t('call')}</button> <button class="sec" onclick="reset()">${t('back')}</button>`)}
+const API=new URLSearchParams(location.search).get('api');
+async function api(path,body){const r=await fetch(API+path,body?{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}:{});return r.json()}
+async function lookup(){let p;try{p=API?await api('/agendamento/'+S.cpf):P[S.cpf]}catch(e){return err('nb')}if(!p||p.erro=='nb')return err('nb');if(p.day||p.erro=='out')return err('out');S.p=p;S.tries=0;go(3)}
+function v2(){const p=S.p;stage(`<h1>${t('hi')}, ${p.n.split(' ')[0]}</h1><div class="grid"><div class="card"><dl><dt>${t('grp')}</dt><dd>${tr(p.g)}</dd><dt>${t('emp')}</dt><dd>${p.e}</dd><dt>${t('dest')}</dt><dd>${p.d}</dd><dt>${t('win')}</dt><dd>${pad(p.w[0])}:00 – ${pad(p.w[1])}:00</dd></dl></div><div class="card bio"><h2 style="margin:0">${t('bioT')}</h2><svg id="fp" class="fp" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M12 30a20 20 0 0 1 40 0v6"/><path d="M20 32a12 12 0 0 1 24 0c0 8 1 14 3 18"/><path d="M28 34a4 4 0 0 1 8 0c0 8 1 14 4 20"/><path d="M20 38c0 8-1 12-3 16"/><path d="M26 44c0 6-1 9-2 12"/></svg><div id="bm" class="msg">${t('bioS')}</div><button id="bb" class="pri wide" onclick="bio()">${t('start')}</button></div></div>`)}
+function bio(){const p=S.p,fp=$('fp'),m=$('bm'),b=$('bb');b.disabled=true;fp.setAttribute('class','fp scanning');m.className='msg';m.textContent=t('scan');
+  setTimeout(async()=>{let okb=p.bio;if(API){try{okb=(await api('/biometria',{cpf:S.cpf})).ok}catch(e){okb=0}}if(okb){fp.setAttribute('class','fp good');m.className='msg good';m.textContent=t('ok');setTimeout(()=>go(4),1200)}
+  else{S.tries++;fp.setAttribute('class','fp');if(S.tries>=3){stage(`<h1>${t('blk')}</h1><button class="pri" onclick="callA()">${t('call')}</button> <button class="sec" onclick="reset()">${t('back')}</button>`);return}
+  m.className='msg bad';m.textContent=`${t('fail')} ${S.tries}/3`;b.disabled=false;b.textContent=t('retry')}},2200)}
+function v3(){const p=S.p;stage(`<h1>${t('chk')}</h1><div class="grid"><div class="card"><b>${t('docs')}</b><div class="chips">${p.doc.map(d=>`<span class="chip ok">${tr(d)}</span>`).join('')}</div></div><div class="card"><b>${t('epi')}</b><div class="chips">${p.epi.map(d=>`<span class="chip">${tr(d)}</span>`).join('')}</div></div></div><label class="agree"><input type="checkbox" onchange="$('eb').disabled=!this.checked"><span>${t('acc')}</span></label><button id="eb" class="pri" disabled onclick="go(5)">${t('emit')}</button>`)}
+function qr(s){let h=0;for(const c of s)h=(h*31+c.charCodeAt(0))>>>0;let o='';const fd=(x,y)=>(x<8&&y<8)||(x>12&&y<8)||(x<8&&y>12);for(let y=0;y<21;y++)for(let x=0;x<21;x++){let on;if(fd(x,y)){const a=x<8?x:x-13,b=y<8?y:y-13;on=(a==0||a==6||b==0||b==6)?(a<7&&b<7):(a>=2&&a<=4&&b>=2&&b<=4)}else{h=(h*1103515245+12345)>>>0;on=(h>>16)&1}if(on)o+=`<rect x="${x}" y="${y}" width="1" height="1"/>`}return `<svg viewBox="0 0 21 21" fill="currentColor" shape-rendering="crispEdges">${o}</svg>`}
+function v4(){const p=S.p,ini=p.n.split(' ').map(w=>w[0]).join(''),no='CR-'+S.cpf.slice(-4)+pad(new Date().getMinutes());
+  stage(`<h1>${t('pr')}</h1><p>${t('badgeS')}</p><div class="slot"></div><div class="bw"><div class="badge"><div class="band" style="background:${p.c}">${tr(p.g)}</div><div class="bd"><div class="ph">${ini}</div><b>${p.n}</b><span>${p.e}</span><span>${t('dest')}: ${p.d}</span><span>${t('valid')} ${pad(p.w[1])}:00</span>${qr(S.cpf+p.g)}<small>${no}</small></div></div></div><div style="text-align:center;margin-top:1.5rem"><button class="pri" id="db" disabled onclick="photo()">${t('done')}</button></div>`);
+  S.no=no;if(API)api('/cracha',{cpf:S.cpf,numero:no}).catch(()=>{});setTimeout(()=>{$('db').disabled=false;document.querySelector('#stage h1').textContent=t('badgeT')},2700)}
+function fin(){let n=20;stage(`<h1>${t('finT')}</h1><p style="color:var(--ink);font-size:1.5rem">${t('finS')} <b>${S.p.d}</b>.</p><p>${t('finS2')}</p><button class="pri" onclick="reset()">${t('again')} (<span id="cd">${n}</span>)</button>`);clearInterval(ic);ic=setInterval(()=>{n--;$('cd')&&($('cd').textContent=n);if(n<=0)reset()},1000)}
+function callA(){const e=$('toast');e.textContent=t('called');e.style.display='block';setTimeout(()=>e.style.display='none',4000)}
+function fz(){const r=document.documentElement;r.style.fontSize=r.style.fontSize=='125%'?'':'125%'}
+function th(){const r=document.documentElement,d=r.dataset.theme?r.dataset.theme=='dark':matchMedia('(prefers-color-scheme:dark)').matches;r.dataset.theme=d?'light':'dark'}
+function rs(){clearTimeout(it);if(step>0)it=setTimeout(askIdle,40000)}
+function askIdle(){let n=10;$('idn').textContent=n;$('idle').style.display='grid';clearInterval(ic);ic=setInterval(()=>{n--;$('idn').textContent=n;if(n<=0)reset()},1000)}
+function stay(){clearInterval(ic);$('idle').style.display='none';rs()}
+['pointerdown','keydown'].forEach(e=>addEventListener(e,()=>{if($('idle').style.display!='grid')rs()}));
+if(API){document.querySelector('footer').hidden=true;document.body.style.cursor='none';addEventListener('contextmenu',e=>e.preventDefault())}
+R();
+</script>
+</body>
+</html>
